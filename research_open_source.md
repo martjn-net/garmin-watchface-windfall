@@ -119,6 +119,34 @@
 - **Beschreibung:** Persoenliches Watch Face mit modernem Design
 - **Relevanz fuer Windfall:** Referenz fuer individuellen Designansatz.
 
+### 2.11 MoveToBeActive (AMOLED-Referenz)
+
+- **GitHub:** https://github.com/fevieira27/MoveToBeActive
+- **Stars:** 42+
+- **Beschreibung:** Watch Face mit AOD-Support, Health-Daten-Integration
+- **Staerken:** Beste Referenz fuer AMOLED Always-On-Implementierung, Memory-Optimierung
+- **Relevanz fuer Windfall:** Direkt uebertragbare AOD-Patterns und Memory-Techniken.
+
+### 2.12 Yet-Another-WatchFace
+
+- **GitHub:** https://github.com/Laverlin/Yet-Another-WatchFace
+- **Stars:** 65+, MIT-Lizenz
+- **Beschreibung:** Watch Face mit Weather API, Timezone/DST-Handling, 30+ Geraete
+- **Relevanz fuer Windfall:** Gute Referenz fuer Wetter-Integration und Multi-Device-Support.
+
+### 2.13 Segment34mkII
+
+- **GitHub:** https://github.com/ludw/Segment34mkII
+- **Stars:** 182+
+- **Beschreibung:** Segment-Display-Stil Watch Face
+- **Relevanz fuer Windfall:** Sehr populaer, zeigt was im Store gut ankommt.
+
+### 2.14 Awesome Garmin (Kuratierte Liste)
+
+- **GitHub:** https://github.com/bombsimon/awesome-garmin
+- **Beschreibung:** Kuratierte Liste mit 226+ Watch Faces und Connect IQ Ressourcen
+- **Relevanz fuer Windfall:** Hervorragende Uebersicht ueber das gesamte Oekosystem.
+
 ---
 
 ## 3. Connect IQ API -- Verfuegbare Features fuer Watch Faces

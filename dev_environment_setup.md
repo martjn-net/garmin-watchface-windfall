@@ -19,8 +19,12 @@
 
 ## Schritt 1: Java JDK installieren
 
+> **Hinweis:** Einige Entwickler berichten von Kompatibilitaetsproblemen mit Java 12+.
+> Falls Probleme auftreten, auf OpenJDK 11 LTS zurueckwechseln.
+
 ```bash
-# OpenJDK 17 LTS installieren (empfohlen)
+# OpenJDK 17 LTS installieren (Standard)
+# Bei Problemen: openjdk-11-jdk als Fallback
 sudo apt update
 sudo apt install openjdk-17-jdk openjdk-17-jre
 

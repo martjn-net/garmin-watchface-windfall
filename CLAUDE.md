@@ -73,7 +73,9 @@ resources/
 
 - **Template:** `aurpelai/garmin-watchface-template` (MIT, MVC-Architektur)
 - **Referenz:** `warmsound/crystal-face` (AMOLED, Performance, 712+ Commits)
+- **AMOLED/AOD:** `fevieira27/MoveToBeActive` (beste AOD-Referenz, Memory-Optimierung)
 - **Minimal:** `dbcm/KISSFace` (KISS-Prinzip)
+- **Ökosystem:** `bombsimon/awesome-garmin` (226+ Watch Faces, kuratierte Liste)
 
 ## Entwicklungsumgebung
 
