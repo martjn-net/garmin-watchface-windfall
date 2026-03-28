@@ -347,7 +347,7 @@ Build-Konfigurationsdatei (DSL):
 4. Performance-Optimierungen (Cached Drawables, minimale Updates)
 5. Lokalisierungs-Pattern
 
-### Design-Inspiration: Apple Watch (Clean/Minimal)
+### Design-Inspiration: Modern-Minimalistisch
 
 **Ziel-Aesthetik:**
 - Grosse, gut lesbare Zeitanzeige mit duenner Schrift (SF Pro / Helvetica Neue Stil)

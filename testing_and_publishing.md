@@ -160,7 +160,7 @@ Seit **Februar 2024** gelten besondere Anforderungen fuer die Sichtbarkeit von A
 
 ### 3.2 Garmin Pay Details
 
-- Garmin nimmt **15%** (deutlich weniger als Apple/Google mit 30%)
+- Garmin nimmt **15%** (deutlich weniger als die ueblichen 30% bei anderen Plattformen)
 - Garmin uebernimmt die Kreditkartenabwicklung
 - Digitale Dienstleistungssteuern (DST) und Waehrungsumrechnung werden vom Auszahlungsbetrag abgezogen
 - Preise werden aus vordefinierten **Price Points** gewaehlt (ab $0.99 / EUR-Aequivalent, haeufig $4.99 fuer Watch Faces)

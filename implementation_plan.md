@@ -1,6 +1,6 @@
 # Implementierungsplan: Windfall Watch Face
 
-**Projekt:** "Windfall" / "Fallobst" — Clean, Apple-inspiriertes Watch Face für Garmin Descent G2
+**Projekt:** "Windfall" / "Fallobst" — Clean, modern-minimalistisches Watch Face für Garmin Descent G2
 **Datum:** 2026-03-28
 
 ---
@@ -83,7 +83,7 @@
 ## Phase 3: Kernfunktionen implementieren (Tag 3-6)
 
 ### 3.1 Zeitanzeige
-- [ ] Custom Bitmap Font erstellen/finden (dünn, clean, Apple-Stil)
+- [ ] Custom Bitmap Font erstellen/finden (dünn, clean, modern-minimalistisch)
   - Tool: BMFont oder Garmin Font Editor
   - Alternativ: Zeichnen mit `dc.drawText()` und eingebautem Font
 - [ ] 12h/24h Format aus Systemeinstellungen lesen

@@ -73,7 +73,7 @@ Source: [Garmin Forums - I give up on Garmin Connect IQ](https://forums.garmin.c
 - "If you don't know how to code, almost any other language is better. With very limited Monkey C codebase data over the web and very cropped language capabilities, you will never properly learn about data types specifics, data structures, loops, OOP, common programming patterns." -- [Garmin Forums](https://forums.garmin.com/developer/connect-iq/f/discussion/363189/learning-to-code-with-monkey-c-or-is-another-language-better)
 - "You can't always write canonical and nice readable OOP code in Monkey C even if you are an expert, because the device hardware is often too weak to support code patterns which you'd normally use in Java or C#, or Monkey C doesn't support such features itself."
 - **Recommendation**: Learning a C-family language (Java, JavaScript) before Monkey C is always the best option
-- As wearables evolve, "Monkey-C's shortcomings have put Garmin at a disadvantage compared to ecosystems like Apple's Swift and Google's Kotlin"
+- As wearables evolve, Monkey C's limitations setzen Garmin gegenueber moderneren Oekosystemen (Swift, Kotlin) in einen Nachteil
 
 ### Scope Pitfall
 
