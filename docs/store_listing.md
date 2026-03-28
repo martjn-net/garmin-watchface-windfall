@@ -7,6 +7,18 @@ Languages: English, German
 
 ---
 
+## URLs
+
+- Developer Portal: https://apps.garmin.com/developer
+- Store Upload: https://apps.garmin.com/developer/app/upload
+- GitHub Repo: https://github.com/martjn-net/garmin-watchface-windfall
+- GitHub Release v0.4.0: https://github.com/martjn-net/garmin-watchface-windfall/releases/tag/v0.4.0
+- Garmin EEA Verification: https://apps.garmin.com/dsa
+- Connect IQ SDK Docs: https://developer.garmin.com/connect-iq/sdk/
+- AMOLED Guidelines: https://developer.garmin.com/connect-iq/user-experience-guidelines/watch-faces/
+
+---
+
 ## Store Upload Form Progress
 
 ### Completed Fields
