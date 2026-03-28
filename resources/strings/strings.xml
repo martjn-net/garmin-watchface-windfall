@@ -1,3 +1,6 @@
 <strings>
     <string id="AppName">Windfall</string>
+    <string id="SettingStepsGoalTitle">Steps Goal</string>
+    <string id="SettingCaloriesGoalTitle">Calories Goal (kcal)</string>
+    <string id="SettingActiveMinutesGoalTitle">Active Minutes Goal (weekly)</string>
 </strings>

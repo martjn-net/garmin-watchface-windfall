@@ -1,0 +1,5 @@
+<properties>
+    <property id="StepsGoal" type="number">10000</property>
+    <property id="CaloriesGoal" type="number">2000</property>
+    <property id="ActiveMinutesGoal" type="number">150</property>
+</properties>

@@ -1,0 +1,20 @@
+<settings>
+    <setting propertyKey="@Properties.StepsGoal"
+             title="@Strings.SettingStepsGoalTitle">
+        <settingConfig type="numeric"
+                       min="1000"
+                       max="50000"/>
+    </setting>
+    <setting propertyKey="@Properties.CaloriesGoal"
+             title="@Strings.SettingCaloriesGoalTitle">
+        <settingConfig type="numeric"
+                       min="1000"
+                       max="5000"/>
+    </setting>
+    <setting propertyKey="@Properties.ActiveMinutesGoal"
+             title="@Strings.SettingActiveMinutesGoalTitle">
+        <settingConfig type="numeric"
+                       min="30"
+                       max="600"/>
+    </setting>
+</settings>

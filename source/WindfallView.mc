@@ -5,6 +5,7 @@ import Toybox.WatchUi;
 import Toybox.Time;
 import Toybox.Time.Gregorian;
 import Toybox.ActivityMonitor;
+import Toybox.Application;
 import Toybox.Math;
 
 class WindfallView extends WatchUi.WatchFace {
@@ -59,10 +60,9 @@ class WindfallView extends WatchUi.WatchFace {
 
         // Steps ring (outermost, teal)
         var stepsValue = 0;
-        var stepsGoal = 10000;
+        var stepsGoal = Application.Properties.getValue("StepsGoal") as Number;
+        if (stepsGoal == null || stepsGoal < 1000) { stepsGoal = 10000; }
         if (actInfo.steps != null) { stepsValue = actInfo.steps as Number; }
-        if (actInfo has :stepGoal && actInfo.stepGoal != null) { stepsGoal = actInfo.stepGoal as Number; }
-        if (stepsGoal == 0) { stepsGoal = 10000; }
         var stepsProgress = (stepsValue > stepsGoal) ? 1.0f : stepsValue.toFloat() / stepsGoal.toFloat();
         if (stepsValue == 0) { stepsProgress = 0.48f; } // Fallback for simulator
         drawProgressRing(dc, cx, cy, ringRadius, ringWidth, stepsProgress, COLOR_ACCENT_TEAL, COLOR_DARK_GRAY);
@@ -71,7 +71,8 @@ class WindfallView extends WatchUi.WatchFace {
         ringRadius -= (ringWidth + 4);
         var cals = 0;
         if (actInfo has :calories && actInfo.calories != null) { cals = actInfo.calories as Number; }
-        var calsGoal = 2000;
+        var calsGoal = Application.Properties.getValue("CaloriesGoal") as Number;
+        if (calsGoal == null || calsGoal < 1000) { calsGoal = 2000; }
         var calsProgress = (cals > calsGoal) ? 1.0f : cals.toFloat() / calsGoal.toFloat();
         if (cals == 0) { calsProgress = 0.35f; }
         drawProgressRing(dc, cx, cy, ringRadius, ringWidth, calsProgress, COLOR_ACCENT_ORANGE, COLOR_DARK_GRAY);
@@ -86,7 +87,8 @@ class WindfallView extends WatchUi.WatchFace {
                 if (total != null) { activeMins = total as Number; }
             }
         }
-        var activeMinsGoal = 150; // WHO recommendation
+        var activeMinsGoal = Application.Properties.getValue("ActiveMinutesGoal") as Number;
+        if (activeMinsGoal == null || activeMinsGoal < 30) { activeMinsGoal = 150; }
         var activeMinsProgress = (activeMins > activeMinsGoal) ? 1.0f : activeMins.toFloat() / activeMinsGoal.toFloat();
         if (activeMins == 0) { activeMinsProgress = 0.62f; }
         drawProgressRing(dc, cx, cy, ringRadius, ringWidth, activeMinsProgress, COLOR_ACCENT_GREEN, COLOR_DARK_GRAY);
