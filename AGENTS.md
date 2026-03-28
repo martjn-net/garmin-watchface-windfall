@@ -2,7 +2,8 @@
 
 ## Regeln
 
-- **Niemals** den Namen "Apple" in Code, Docs, Beschreibungen oder Commit-Messages verwenden. Das Design ist "modern-minimalistisch" — keine Markenreferenzen.
+- **Niemals** das Design als Kopie/Inspiration eines anderen Smartwatch-Herstellers beschreiben. Keine "inspiriert von [Firma]"-Formulierungen. Design-Stil ist "modern-minimalistisch" oder "clean". Gilt für alle Texte, Memory, Code, Commits, Store-Listings.
+- Technische Markennamen (Garmin, Java, VS Code etc.) sind erlaubt.
 - Keine Garmin-eigenen Watch-Face-Designs nachbauen (Store-Regel seit Mai 2025)
 
 ## Projektübersicht
@@ -81,14 +82,37 @@ resources/
 - **Minimal:** `dbcm/KISSFace` (KISS-Prinzip)
 - **Ökosystem:** `bombsimon/awesome-garmin` (226+ Watch Faces, kuratierte Liste)
 
-## Entwicklungsumgebung
+## Entwicklungsumgebung (Ubuntu 24.04)
 
-- Java JDK 17 (Fallback: JDK 11 bei Kompatibilitätsproblemen)
-- VS Code + Monkey C Extension
-- Connect IQ SDK 7.x+
-- Linux: `connect-iq-sdk-manager-cli` oder AppImage von `pcolby/connectiq-sdk-manager`
-- Build: `monkey.jungle` Konfiguration
-- Test: Simulator in VS Code, Sideload per USB → `GARMIN/Apps/`
+### Installierte Tools & Pfade
+- **Java JDK 21** — `/usr/lib/jvm/java-21-openjdk-amd64` (JAVA_HOME in `~/.bashrc`)
+- **VS Code** + **Monkey C Extension** `garmin.monkey-c` v1.1.3
+- **Connect IQ SDK 9.1.0** — `~/.Garmin/ConnectIQ/Sdks/connectiq-sdk-lin-9.1.0-2026-03-09-6a872a80b/`
+- **SDK Manager CLI** — `~/go/bin/connect-iq-sdk-manager-cli` (Go-Binary, `lindell/connect-iq-sdk-manager-cli`)
+- **Simulator AppImage** — `~/.Garmin/ConnectIQ/AppImages/Connect_IQ_Simulator-9.1.0+159-x86_64.AppImage` (von `pcolby/connectiq-sdk-manager`)
+- **Developer Key** — `~/.Garmin/ConnectIQ/developer_key.der` (RSA 4096, DER-Format)
+- **Device Fonts** — `~/.Garmin/ConnectIQ/Fonts/` (mit `--include-fonts` heruntergeladen!)
+- **Current SDK Config** — `~/.Garmin/ConnectIQ/current-sdk.cfg`
+
+### Bekannte Probleme auf Ubuntu 24.04
+- Der native Garmin-Simulator braucht `libwebkit2gtk-4.0`, Ubuntu 24.04 hat nur `4.1`
+- Symlink-Workaround funktioniert NICHT (libsoup2/3 Konflikt)
+- **Lösung:** Simulator als AppImage von `pcolby/connectiq-sdk-manager` verwenden
+- SDK Manager GUI hat dasselbe Problem → AppImage oder CLI nutzen
+
+### Build & Test Workflow
+1. **Build:** `monkeyc -d descentg2 -f monkey.jungle -o bin/WindfallApp.prg -y ~/.Garmin/ConnectIQ/developer_key.der -w`
+2. **Simulator starten:** `~/.Garmin/ConnectIQ/AppImages/Connect_IQ_Simulator-*.AppImage`
+3. **Watch Face laden:** `monkeydo bin/WindfallApp.prg descentg2`
+4. **Oder in VS Code:** F5 → "Run on Descent G2" (launch.json konfiguriert)
+5. **Sideload:** `Build for Device` → `.prg` nach `GARMIN/Apps/` auf der Uhr kopieren
+
+### Wichtig: Device Fonts herunterladen
+Beim Download von Device Files immer `--include-fonts` angeben:
+```bash
+connect-iq-sdk-manager-cli device download -d descentg2 --include-fonts
+```
+Ohne Fonts crasht der Simulator mit "Invalid Font Specified".
 
 ## Veröffentlichung
 

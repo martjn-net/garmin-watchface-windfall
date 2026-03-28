@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "monkeyc",
+            "request": "launch",
+            "name": "Run on Descent G2",
+            "device": "descentg2",
+            "preBuildTask": "monkeyc: Build Current Project"
+        }
+    ]
+}

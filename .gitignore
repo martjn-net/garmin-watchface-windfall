@@ -5,7 +5,6 @@ build/
 *.iq
 
 # IDE
-.vscode/
 *.code-workspace
 
 # OS

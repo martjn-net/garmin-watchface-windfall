@@ -1,0 +1,6 @@
+{
+    "monkeyC.developerKeyPath": "/home/arens/.Garmin/ConnectIQ/developer_key.der",
+    "monkeyC.typeCheckLevel": "Informative",
+    "monkeyC.optimizationLevel": "Basic",
+    "monkeyC.compilerWarnings": true
+}
