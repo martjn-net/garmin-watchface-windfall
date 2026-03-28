@@ -56,11 +56,27 @@ More devices planned (Forerunner 165, Vivoactive 5/6, Venu 3S/4S, Instinct 3 AMO
 *Coming soon* — The watch face will be available for free in the Garmin Connect IQ Store.
 
 ### Sideloading (Manual Install)
-1. Download the latest `.prg` file from [Releases](https://github.com/martjn-net/garmin-watchface-windfall/releases)
-2. Connect your watch via USB
-3. Copy the `.prg` file to the `GARMIN/Apps/` folder on your watch
-4. Safely eject the watch
-5. On your watch, go to watch face settings and select "Windfall"
+
+**Download and copy:**
+1. Download the latest `WindfallApp.prg` from [Releases](https://github.com/martjn-net/garmin-watchface-windfall/releases)
+2. Connect your Garmin watch via USB cable to your computer
+3. The watch appears as a removable drive — open it in your file manager
+4. Navigate to the folder `GARMIN` > `Apps`
+5. Copy `WindfallApp.prg` into this `Apps` folder
+6. Safely eject / unmount the watch drive
+7. Disconnect the USB cable
+
+**Activate the watch face on your watch:**
+
+8. Press and hold **UP** (or **MENU**) to open the main menu
+9. Scroll down to **Watch Face** and press **START** (or tap)
+10. Scroll through the available watch faces until you see **Windfall**
+11. Press **START** to select it
+
+Alternatively via the **Garmin Connect app** on your phone:
+- Open Garmin Connect > Garmin Devices > your watch
+- Tap **Appearance** > **Watch Face**
+- Scroll to **Windfall** and tap **Apply**
 
 ---
 
