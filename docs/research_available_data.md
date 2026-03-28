@@ -46,7 +46,7 @@
 | Launcher icon size | 60x60 px |
 | Part number | 006-B4588-00 |
 
-Source: `/home/arens/.Garmin/ConnectIQ/Devices/descentg2/compiler.json`
+Source: `~/.Garmin/ConnectIQ/Devices/descentg2/compiler.json`
 
 ---
 

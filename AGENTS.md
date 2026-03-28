@@ -5,6 +5,7 @@
 - **Niemals** das Design als Kopie/Inspiration eines anderen Smartwatch-Herstellers beschreiben. Keine "inspiriert von [Firma]"-Formulierungen. Design-Stil ist "modern-minimalistisch" oder "clean". Gilt für alle Texte, Memory, Code, Commits, Store-Listings.
 - Technische Markennamen (Garmin, Java, VS Code etc.) sind erlaubt.
 - Keine Garmin-eigenen Watch-Face-Designs nachbauen (Store-Regel seit Mai 2025)
+- **Version hochzählen:** Bei jedem Release die Version in `manifest.xml` (`version`-Attribut) hochzählen. Aktuell: `0.4.0`
 
 ## Projektübersicht
 
@@ -125,11 +126,11 @@ Ohne Fonts crasht der Simulator mit "Invalid Font Specified".
 
 | Datei | Inhalt |
 |-------|--------|
-| `research_open_source.md` | Open-Source-Projekte, Monkey C, API, Projektstruktur |
-| `dev_environment_setup.md` | Linux-Setup Schritt für Schritt |
-| `implementation_plan.md` | 7-Phasen-Plan mit Checklisten |
-| `testing_and_publishing.md` | Testen, Store, Gewerbe, Monetarisierung |
-| `developer_experiences.md` | Erfahrungsberichte, Pitfalls, 18 Themen |
+| `docs/research_open_source.md` | Open-Source-Projekte, Monkey C, API, Projektstruktur |
+| `docs/dev_environment_setup.md` | Linux-Setup Schritt für Schritt |
+| `docs/implementation_plan.md` | 7-Phasen-Plan mit Checklisten |
+| `docs/testing_and_publishing.md` | Testen, Store, Gewerbe, Monetarisierung |
+| `docs/developer_experiences.md` | Erfahrungsberichte, Pitfalls, 18 Themen |
 
 ## Wichtige Garmin-Doku-Links
 

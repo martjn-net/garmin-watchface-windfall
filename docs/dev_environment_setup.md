@@ -355,8 +355,8 @@ chmod +x $SDKROOT/bin/*
 **Symptom:** Login-Bildschirm erscheint nicht oder ist leer
 **Loesung:** CLI-Tool verwenden mit Umgebungsvariablen:
 ```bash
-export GARMIN_USERNAME="dein.benutzername@email.com"
-export GARMIN_PASSWORD="dein-passwort"
+export GARMIN_USERNAME="<dein-benutzername>"
+export GARMIN_PASSWORD="<dein-passwort>"
 connect-iq-sdk-manager sdk set 7.3.1
 ```
 

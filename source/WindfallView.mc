@@ -6,29 +6,57 @@ import Toybox.Time;
 import Toybox.Time.Gregorian;
 import Toybox.ActivityMonitor;
 import Toybox.Application;
-import Toybox.Math;
 
 class WindfallView extends WatchUi.WatchFace {
 
     hidden var _isAwake as Boolean = true;
 
-    // Colors
+    // Cached settings
+    hidden var _stepsGoal as Number = 10000;
+    hidden var _calsGoal as Number = 2000;
+    hidden var _activeMinsGoal as Number = 150;
+
+    // Colors — saturated for AMOLED
     hidden const COLOR_WHITE = 0xFFFFFF;
-    hidden const COLOR_LIGHT_GRAY = 0xA0A0A0;
-    hidden const COLOR_MID_GRAY = 0x666666;
+    hidden const COLOR_LIGHT_GRAY = 0xB0B0B0;
+    hidden const COLOR_MID_GRAY = 0x606060;
     hidden const COLOR_DARK_GRAY = 0x333333;
-    hidden const COLOR_ACCENT_TEAL = 0x0AC5C9;
-    hidden const COLOR_ACCENT_GREEN = 0x43B648;
-    hidden const COLOR_ACCENT_ORANGE = 0xF2920A;
-    hidden const COLOR_ACCENT_RED = 0xE84D4F;
-    hidden const COLOR_ACCENT_BLUE = 0x1E8FE5;
-    hidden const COLOR_ACCENT_PURPLE = 0xA244B8;
+    hidden const COLOR_RING_TRACK = 0x1A1A1A;
+    hidden const COLOR_TEAL = 0x00D4D8;
+    hidden const COLOR_GREEN = 0x30D158;
+    hidden const COLOR_ORANGE = 0xFF9F0A;
+    hidden const COLOR_RED = 0xFF453A;
+    hidden const COLOR_BLUE = 0x0A84FF;
+    hidden const COLOR_BATTERY = 0xCCCCCC;
+
+    // AOD
+    hidden const COLOR_AOD_TIME = 0x808080;
+    hidden const COLOR_AOD_DATE = 0x444444;
+
+    // Ring
+    hidden const RING_INSET = 10;
+    hidden const RING_WIDTH = 4;
+    hidden const RING_GAP = 5;
+
+    // Burn-in
+    hidden const BI_X = [-3, -2, -1, 0, 1, 2, 3, 2, 1, 0, -1, -2];
+    hidden const BI_Y = [0, 1, 2, 3, 2, 1, 0, -1, -2, -3, -2, -1];
 
     function initialize() {
         WatchFace.initialize();
+        loadSettings();
     }
 
     function onLayout(dc as Dc) as Void {
+    }
+
+    hidden function loadSettings() as Void {
+        var s = Application.Properties.getValue("StepsGoal");
+        _stepsGoal = (s != null && s >= 1000) ? s as Number : 10000;
+        var c = Application.Properties.getValue("CaloriesGoal");
+        _calsGoal = (c != null && c >= 1000) ? c as Number : 2000;
+        var a = Application.Properties.getValue("ActiveMinutesGoal");
+        _activeMinsGoal = (a != null && a >= 30) ? a as Number : 150;
     }
 
     function onUpdate(dc as Dc) as Void {
@@ -38,47 +66,45 @@ class WindfallView extends WatchUi.WatchFace {
         var cy = height / 2;
         var radius = (width < height) ? width / 2 : height / 2;
 
-        // Black background (AMOLED)
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
         dc.clear();
 
-        // Enable anti-aliasing for smooth arcs
         if (dc has :setAntiAlias) {
             dc.setAntiAlias(true);
         }
 
-        // Get data
         var clockTime = System.getClockTime();
+
+        if (_isAwake) {
+            drawActiveMode(dc, cx, cy, radius, clockTime);
+        } else {
+            var idx = clockTime.min % 12;
+            drawAodMode(dc, cx + BI_X[idx], cy + BI_Y[idx], clockTime);
+        }
+    }
+
+    hidden function drawActiveMode(dc as Dc, cx as Number, cy as Number,
+            radius as Number, clockTime as ClockTime) as Void {
         var actInfo = ActivityMonitor.getInfo();
         var stats = System.getSystemStats();
 
         // ========================================
-        // OUTER RINGS — Progress indicators
+        // ACTIVITY RINGS
         // ========================================
-        var ringRadius = radius - 12;
-        var ringWidth = 6;
+        var ringR = radius - RING_INSET;
 
-        // Steps ring (outermost, teal)
         var stepsValue = 0;
-        var stepsGoal = Application.Properties.getValue("StepsGoal") as Number;
-        if (stepsGoal == null || stepsGoal < 1000) { stepsGoal = 10000; }
         if (actInfo.steps != null) { stepsValue = actInfo.steps as Number; }
-        var stepsProgress = (stepsValue > stepsGoal) ? 1.0f : stepsValue.toFloat() / stepsGoal.toFloat();
-        if (stepsValue == 0) { stepsProgress = 0.48f; } // Fallback for simulator
-        drawProgressRing(dc, cx, cy, ringRadius, ringWidth, stepsProgress, COLOR_ACCENT_TEAL, COLOR_DARK_GRAY);
+        var stepsProgress = (stepsValue > 0) ? calcProgress(stepsValue, _stepsGoal) : 0.48f;
+        drawRing(dc, cx, cy, ringR, stepsProgress, COLOR_TEAL);
 
-        // Calories ring (middle, orange)
-        ringRadius -= (ringWidth + 4);
+        ringR -= (RING_WIDTH + RING_GAP);
         var cals = 0;
         if (actInfo has :calories && actInfo.calories != null) { cals = actInfo.calories as Number; }
-        var calsGoal = Application.Properties.getValue("CaloriesGoal") as Number;
-        if (calsGoal == null || calsGoal < 1000) { calsGoal = 2000; }
-        var calsProgress = (cals > calsGoal) ? 1.0f : cals.toFloat() / calsGoal.toFloat();
-        if (cals == 0) { calsProgress = 0.35f; }
-        drawProgressRing(dc, cx, cy, ringRadius, ringWidth, calsProgress, COLOR_ACCENT_ORANGE, COLOR_DARK_GRAY);
+        var calsProgress = (cals > 0) ? calcProgress(cals, _calsGoal) : 0.35f;
+        drawRing(dc, cx, cy, ringR, calsProgress, COLOR_ORANGE);
 
-        // Active minutes ring (inner, green)
-        ringRadius -= (ringWidth + 4);
+        ringR -= (RING_WIDTH + RING_GAP);
         var activeMins = 0;
         if (actInfo has :activeMinutesWeek) {
             var amw = actInfo.activeMinutesWeek;
@@ -87,178 +113,185 @@ class WindfallView extends WatchUi.WatchFace {
                 if (total != null) { activeMins = total as Number; }
             }
         }
-        var activeMinsGoal = Application.Properties.getValue("ActiveMinutesGoal") as Number;
-        if (activeMinsGoal == null || activeMinsGoal < 30) { activeMinsGoal = 150; }
-        var activeMinsProgress = (activeMins > activeMinsGoal) ? 1.0f : activeMins.toFloat() / activeMinsGoal.toFloat();
-        if (activeMins == 0) { activeMinsProgress = 0.62f; }
-        drawProgressRing(dc, cx, cy, ringRadius, ringWidth, activeMinsProgress, COLOR_ACCENT_GREEN, COLOR_DARK_GRAY);
+        var activeMinsProgress = (activeMins > 0) ? calcProgress(activeMins, _activeMinsGoal) : 0.62f;
+        drawRing(dc, cx, cy, ringR, activeMinsProgress, COLOR_GREEN);
 
         // ========================================
-        // TIME — Large, center
+        // DATE
         // ========================================
-        var hours = clockTime.hour;
-        if (!System.getDeviceSettings().is24Hour) {
-            hours = hours % 12;
-            if (hours == 0) { hours = 12; }
-        }
-        var timeString = Lang.format("$1$:$2$", [
-            hours.format("%02d"),
-            clockTime.min.format("%02d")
-        ]);
-
-        dc.setColor(COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(
-            cx, cy - 30,
-            Graphics.FONT_NUMBER_HOT,
-            timeString,
-            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
-        );
-
-        // Seconds — small, subtle, only when awake
-        if (_isAwake) {
-            dc.setColor(COLOR_MID_GRAY, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(
-                cx, cy + 18,
-                Graphics.FONT_XTINY,
-                clockTime.sec.format("%02d"),
-                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
-            );
-        }
-
-        // ========================================
-        // DATE — Above time
-        // ========================================
-        var now = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
-        var dateString = Lang.format("$1$  $2$ $3$", [
-            now.day_of_week,
-            now.day,
-            now.month
-        ]);
-
         dc.setColor(COLOR_LIGHT_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(
-            cx, cy - 85,
-            Graphics.FONT_XTINY,
-            dateString.toUpper(),
-            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
-        );
+        dc.drawText(cx, cy - 85, Graphics.FONT_XTINY,
+            formatDate(),
+            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
         // ========================================
-        // COMPLICATIONS — Bottom half
+        // TIME
         // ========================================
-        var compY = cy + 58;
+        dc.setColor(COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx, cy - 20, Graphics.FONT_NUMBER_MEDIUM,
+            formatTime(clockTime),
+            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+
+        // Seconds
+        dc.setColor(COLOR_MID_GRAY, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx, cy + 24, Graphics.FONT_XTINY,
+            clockTime.sec.format("%02d"),
+            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+
+        // ========================================
+        // COMPLICATIONS — row 1: HR | BAT | STEPS
+        // ========================================
+        var compY = cy + 65;
         var compSpacing = 75;
 
-        // Heart Rate (left)
+        // Heart Rate — always red (no ring, own color)
         var hrValue = 0;
         if (actInfo has :currentHeartRate) {
             var hr = actInfo.currentHeartRate;
             if (hr != null) { hrValue = hr as Number; }
         }
-        var hrString = (hrValue > 0) ? hrValue.format("%d") : "72";
-        var hrColor = (hrValue > 0) ? COLOR_ACCENT_RED : COLOR_MID_GRAY;
-
-        dc.setColor(hrColor, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx - compSpacing, compY, Graphics.FONT_TINY, hrString,
+        dc.setColor(COLOR_RED, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx - compSpacing, compY, Graphics.FONT_TINY,
+            (hrValue > 0) ? hrValue.format("%d") : "72",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         dc.setColor(COLOR_DARK_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx - compSpacing, compY + 20, Graphics.FONT_XTINY, "BPM",
+        dc.drawText(cx - compSpacing, compY + 22, Graphics.FONT_XTINY, "BPM",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
-        // Battery (center)
+        // Battery — silver, red when low
         var battery = stats.battery;
-        var batteryString = battery.format("%d") + "%";
-        var batteryColor = (battery > 20) ? COLOR_ACCENT_GREEN : COLOR_ACCENT_RED;
-
-        dc.setColor(batteryColor, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, compY, Graphics.FONT_TINY, batteryString,
+        dc.setColor((battery > 20) ? COLOR_BATTERY : COLOR_RED, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx, compY, Graphics.FONT_TINY,
+            battery.format("%d") + "%",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         dc.setColor(COLOR_DARK_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, compY + 20, Graphics.FONT_XTINY, "BAT",
+        dc.drawText(cx, compY + 22, Graphics.FONT_XTINY, "BAT",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
-        // Steps (right)
-        var stepsDisplay = (stepsValue > 0) ? formatThousands(stepsValue) : "4.8K";
-        var stepsColor = (stepsValue > 0) ? COLOR_ACCENT_TEAL : COLOR_MID_GRAY;
-
-        dc.setColor(stepsColor, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx + compSpacing, compY, Graphics.FONT_TINY, stepsDisplay,
+        // Steps — teal (matches ring)
+        dc.setColor(COLOR_TEAL, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx + compSpacing, compY, Graphics.FONT_TINY,
+            (stepsValue > 0) ? formatThousands(stepsValue) : "4.8K",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         dc.setColor(COLOR_DARK_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx + compSpacing, compY + 20, Graphics.FONT_XTINY, "STEPS",
+        dc.drawText(cx + compSpacing, compY + 22, Graphics.FONT_XTINY, "STEPS",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
         // ========================================
-        // BOTTOM ROW — Floors + Calories
+        // BOTTOM ROW — FL | CAL
         // ========================================
-        var bottomY = cy + 105;
+        var bottomY = cy + 120;
 
-        // Floors (left of center)
+        // Floors — blue
         var floors = 0;
         if (actInfo has :floorsClimbed && actInfo.floorsClimbed != null) {
             floors = actInfo.floorsClimbed as Number;
         }
-        var floorsString = (floors > 0) ? floors.format("%d") : "7";
-        var floorsColor = (floors > 0) ? COLOR_ACCENT_BLUE : COLOR_MID_GRAY;
-
-        dc.setColor(floorsColor, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx - 40, bottomY, Graphics.FONT_XTINY, floorsString,
+        dc.setColor(COLOR_BLUE, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx - 40, bottomY, Graphics.FONT_XTINY,
+            (floors > 0) ? floors.format("%d") : "7",
             Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER);
         dc.setColor(COLOR_DARK_GRAY, Graphics.COLOR_TRANSPARENT);
         dc.drawText(cx - 36, bottomY, Graphics.FONT_XTINY, "FL",
             Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
 
-        // Calories (right of center)
-        var calsString = (cals > 0) ? cals.format("%d") : "842";
-        var calsColor = (cals > 0) ? COLOR_ACCENT_ORANGE : COLOR_MID_GRAY;
-
-        dc.setColor(calsColor, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx + 40, bottomY, Graphics.FONT_XTINY, calsString,
+        // Calories — orange (matches ring)
+        dc.setColor(COLOR_ORANGE, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx + 40, bottomY, Graphics.FONT_XTINY,
+            (cals > 0) ? cals.format("%d") : "842",
             Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
         dc.setColor(COLOR_DARK_GRAY, Graphics.COLOR_TRANSPARENT);
         dc.drawText(cx + 36, bottomY, Graphics.FONT_XTINY, "CAL",
             Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER);
-
-        // ========================================
-        // CONNECTION INDICATOR — tiny dot top-right
-        // ========================================
-        if (System.getDeviceSettings().phoneConnected) {
-            dc.setColor(COLOR_ACCENT_BLUE, Graphics.COLOR_TRANSPARENT);
-            dc.fillCircle(cx + 25, cy - 97, 3);
-        }
     }
 
-    // Draw a progress ring (arc with background track)
-    hidden function drawProgressRing(dc as Dc, cx as Number, cy as Number,
-            r as Number, w as Number, progress as Float,
-            color as Number, trackColor as Number) as Void {
-        var startAngle = 90; // 12 o'clock
-        var fullArc = 360;
+    // Always-on: minimal, dimmed, burn-in offset
+    hidden function drawAodMode(dc as Dc, cx as Number, cy as Number,
+            clockTime as ClockTime) as Void {
+        dc.setColor(COLOR_AOD_TIME, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx, cy - 12, Graphics.FONT_NUMBER_MEDIUM,
+            formatTime(clockTime),
+            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
-        // Track (background)
-        dc.setColor(trackColor, Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth(w);
-        dc.drawArc(cx, cy, r, Graphics.ARC_CLOCKWISE, startAngle, startAngle - fullArc + 2);
+        dc.setColor(COLOR_AOD_DATE, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx, cy + 35, Graphics.FONT_XTINY,
+            formatDate(),
+            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+    }
 
-        // Progress
-        if (progress > 0.0f) {
-            var sweepAngle = (fullArc * progress).toNumber();
-            if (sweepAngle < 2) { sweepAngle = 2; }
-            dc.setColor(color, Graphics.COLOR_TRANSPARENT);
-            dc.drawArc(cx, cy, r, Graphics.ARC_CLOCKWISE, startAngle, startAngle - sweepAngle);
-        }
+    // ========================================
+    // HELPERS
+    // ========================================
 
+    hidden function calcProgress(value as Number, goal as Number) as Float {
+        return value.toFloat() / goal.toFloat();
+    }
+
+    hidden function drawRing(dc as Dc, cx as Number, cy as Number,
+            r as Number, progress as Float, color as Number) as Void {
+        var startAngle = 90;
+
+        // Track
+        dc.setColor(COLOR_RING_TRACK, Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(RING_WIDTH);
+        dc.drawArc(cx, cy, r, Graphics.ARC_CLOCKWISE, startAngle, startAngle - 358);
         dc.setPenWidth(1);
+
+        if (progress <= 0.0f) { return; }
+
+        var mainProgress = (progress > 1.0f) ? 1.0f : progress;
+        var sweepDeg = (360 * mainProgress).toNumber();
+        if (sweepDeg < 2) { sweepDeg = 2; }
+
+        dc.setColor(color, Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(RING_WIDTH);
+        dc.drawArc(cx, cy, r, Graphics.ARC_CLOCKWISE, startAngle, startAngle - sweepDeg);
+        dc.setPenWidth(1);
+
+        // Overflow
+        if (progress > 1.0f) {
+            var overflow = progress - 1.0f;
+            if (overflow > 1.0f) { overflow = 1.0f; }
+            var ovDeg = (360 * overflow).toNumber();
+            if (ovDeg < 2) { ovDeg = 2; }
+            dc.setColor(dimmedColor(color), Graphics.COLOR_TRANSPARENT);
+            dc.setPenWidth(RING_WIDTH);
+            dc.drawArc(cx, cy, r, Graphics.ARC_CLOCKWISE, startAngle, startAngle - ovDeg);
+            dc.setPenWidth(1);
+        }
     }
 
-    // Format number with K suffix (e.g., 4832 -> "4.8K")
+    hidden function dimmedColor(color as Number) as Number {
+        var r = ((color >> 16) & 0xFF) / 2 + 0x40;
+        var g = ((color >> 8) & 0xFF) / 2 + 0x40;
+        var b = (color & 0xFF) / 2 + 0x40;
+        return (r << 16) | (g << 8) | b;
+    }
+
+    hidden function formatTime(clockTime as ClockTime) as String {
+        var hours = clockTime.hour;
+        if (!System.getDeviceSettings().is24Hour) {
+            hours = hours % 12;
+            if (hours == 0) { hours = 12; }
+        }
+        return Lang.format("$1$:$2$", [
+            hours.format("%02d"),
+            clockTime.min.format("%02d")
+        ]);
+    }
+
+    hidden function formatDate() as String {
+        var now = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
+        return Lang.format("$1$  $2$ $3$", [
+            now.day_of_week, now.day, now.month
+        ]).toUpper();
+    }
+
     hidden function formatThousands(value as Number) as String {
         if (value >= 10000) {
             return (value / 1000).format("%d") + "K";
         } else if (value >= 1000) {
-            var k = value / 1000;
-            var remainder = (value % 1000) / 100;
-            return k.format("%d") + "." + remainder.format("%d") + "K";
+            return (value / 1000).format("%d") + "." + ((value % 1000) / 100).format("%d") + "K";
         }
         return value.format("%d");
     }
@@ -271,5 +304,9 @@ class WindfallView extends WatchUi.WatchFace {
     function onExitSleep() as Void {
         _isAwake = true;
         WatchUi.requestUpdate();
+    }
+
+    function reloadSettings() as Void {
+        loadSettings();
     }
 }

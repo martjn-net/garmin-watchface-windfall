@@ -1,0 +1,6 @@
+<strings>
+    <string id="AppName">Windfall</string>
+    <string id="SettingStepsGoalTitle">Schritte-Ziel</string>
+    <string id="SettingCaloriesGoalTitle">Kalorien-Ziel (kcal)</string>
+    <string id="SettingActiveMinutesGoalTitle">Aktivminuten-Ziel (Woche)</string>
+</strings>

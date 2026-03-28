@@ -4,6 +4,8 @@ import Toybox.WatchUi;
 
 class WindfallApp extends Application.AppBase {
 
+    hidden var _view as WindfallView?;
+
     function initialize() {
         AppBase.initialize();
     }
@@ -15,6 +17,14 @@ class WindfallApp extends Application.AppBase {
     }
 
     function getInitialView() as [Views] or [Views, InputDelegates] {
-        return [new WindfallView()];
+        _view = new WindfallView();
+        return [_view];
+    }
+
+    function onSettingsChanged() as Void {
+        if (_view != null) {
+            _view.reloadSettings();
+        }
+        WatchUi.requestUpdate();
     }
 }
