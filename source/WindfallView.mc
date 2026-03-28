@@ -16,12 +16,12 @@ class WindfallView extends WatchUi.WatchFace {
     hidden const COLOR_LIGHT_GRAY = 0xA0A0A0;
     hidden const COLOR_MID_GRAY = 0x666666;
     hidden const COLOR_DARK_GRAY = 0x333333;
-    hidden const COLOR_ACCENT_TEAL = 0x00BCD4;
-    hidden const COLOR_ACCENT_GREEN = 0x4CAF50;
-    hidden const COLOR_ACCENT_ORANGE = 0xFF9800;
-    hidden const COLOR_ACCENT_RED = 0xEF5350;
-    hidden const COLOR_ACCENT_BLUE = 0x2196F3;
-    hidden const COLOR_ACCENT_PURPLE = 0xAB47BC;
+    hidden const COLOR_ACCENT_TEAL = 0x0AC5C9;
+    hidden const COLOR_ACCENT_GREEN = 0x43B648;
+    hidden const COLOR_ACCENT_ORANGE = 0xF2920A;
+    hidden const COLOR_ACCENT_RED = 0xE84D4F;
+    hidden const COLOR_ACCENT_BLUE = 0x1E8FE5;
+    hidden const COLOR_ACCENT_PURPLE = 0xA244B8;
 
     function initialize() {
         WatchFace.initialize();

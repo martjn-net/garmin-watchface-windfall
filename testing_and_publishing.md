@@ -279,7 +279,7 @@ Garmin unterscheidet bei der Registrierung zwischen **Individual** und **Company
 
 **Garmin selbst verlangt also kein Gewerbe** -- die Gewerbepflicht ergibt sich rein aus deutschem Recht bei Gewinnerzielungsabsicht.
 
-> Quellen: [Existenzgruendungsportal - App verkaufen Gewerbe](https://www.existenzgruendungsportal.de/Redaktion/DE/BMWK-Infopool/Antworten/Gruendungsplanung/Gewerbe-Genehmigungen/Dienstleistung/App-ueber-Apple-Store-verkaufen-Gewerbe-anmelden), [Existenzgruendungsportal - Kleinunternehmen](https://www.existenzgruendungsportal.de/Redaktion/DE/BMWK-Infopool/Antworten/Steuern/Kleinunternehmer/App-entwickelt-Kleinunternehmen-anmelden), [Taxfix - Gewerbe anmelden 2026](https://taxfix.de/ratgeber/selbststaendige/gewerbe-anmelden/), [Anwalt-KG - App entwickeln und betreiben](https://anwalt-kg.de/unternehmensrecht/app-entwickeln/)
+> Quellen: [Existenzgruendungsportal - App verkaufen Gewerbe](https://www.existenzgruendungsportal.de/), [Existenzgruendungsportal - Kleinunternehmen](https://www.existenzgruendungsportal.de/), [Taxfix - Gewerbe anmelden 2026](https://taxfix.de/ratgeber/selbststaendige/gewerbe-anmelden/), [Anwalt-KG - App entwickeln und betreiben](https://anwalt-kg.de/unternehmensrecht/app-entwickeln/)
 
 ---
 
