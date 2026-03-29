@@ -9,6 +9,7 @@ Languages: English, German
 
 ## URLs
 
+- **Store Page: https://apps.garmin.com/apps/0ccd8c9b-0e79-490f-a2ad-bc04caf4da00** (pending review)
 - Developer Portal: https://apps.garmin.com/developer
 - Store Upload: https://apps.garmin.com/developer/app/upload
 - GitHub Repo: https://github.com/martjn-net/garmin-watchface-windfall
@@ -149,4 +150,4 @@ Windfall richtet sich an Taucher und Outdoor-Enthusiasten, die ein klares, gut l
 - Minimum API Level: 3.2.0
 - No special permissions required
 - Free
-- Store URL: https://apps.garmin.com/developer (upload pending)
+- Store URL: https://apps.garmin.com/apps/0ccd8c9b-0e79-490f-a2ad-bc04caf4da00
